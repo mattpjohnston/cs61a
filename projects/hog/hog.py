@@ -1,7 +1,5 @@
 """The Game of Hog."""
 
-import this
-
 from dice import make_test_dice, six_sided
 from ucb import interact, main, trace
 
@@ -49,7 +47,11 @@ def boar_brawl(player_score, opponent_score):
 
     """
     # BEGIN PROBLEM 2
-    "*** YOUR CODE HERE ***"
+    player_ones_digit = player_score % 10
+    opponent_tens_digit = opponent_score // 10 % 10
+
+    return 3 * abs(player_ones_digit - opponent_tens_digit) or 1
+
     # END PROBLEM 2
 
 
