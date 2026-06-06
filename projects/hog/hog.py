@@ -228,7 +228,16 @@ def is_always_roll(strategy, goal=GOAL):
     False
     """
     # BEGIN PROBLEM 7
-    "*** YOUR CODE HERE ***"
+    player0, player1 = 0, 0
+    initial_roll = strategy(player0, player1)
+    while player0 < goal:
+        player1 = 0
+        while player1 < goal:
+            if strategy(player0, player1) != initial_roll:
+                return False
+            player1 += 1
+        player0 += 1
+    return True
     # END PROBLEM 7
 
 
