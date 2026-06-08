@@ -196,6 +196,7 @@ def always_roll(n):
     # BEGIN PROBLEM 6
     def strategy(score, opponent_score):
         return n
+
     return strategy
     # END PROBLEM 6
 
@@ -254,7 +255,15 @@ def make_averaged(original_function, times_called=1000):
     """
 
     # BEGIN PROBLEM 8
-    "*** YOUR CODE HERE ***"
+    def averaged(*args):
+        total = 0
+        n = 0
+        while n < times_called:
+            total += original_function(*args)
+            n += 1
+        return total / times_called
+
+    return averaged
     # END PROBLEM 8
 
 
