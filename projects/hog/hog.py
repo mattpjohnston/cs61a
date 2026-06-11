@@ -350,12 +350,26 @@ def sus_strategy(score, opponent_score, threshold=11, num_rolls=6):
 
 
 def final_strategy(score, opponent_score):
-    """Write a brief description of your final strategy.
-
-    *** YOUR DESCRIPTION HERE ***
+    """Roll 0 dice when it gives a good gain after Boar Brawl and Suss Fuss.
+    Roll fewer dice near the goal, otherwise roll more when behind.
     """
     # BEGIN PROBLEM 12
-    return 6  # Remove this line once implemented.
+    zero_score = sus_update(0, score, opponent_score)
+    zero_gain = zero_score - score
+
+    if zero_score >= GOAL:
+        return 0
+
+    if zero_gain >= 8:
+        return 0
+
+    if score >= GOAL - 10:
+        return 4
+
+    if score < opponent_score:
+        return 6
+
+    return 5
     # END PROBLEM 12
 
 
