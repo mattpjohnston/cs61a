@@ -1,6 +1,6 @@
 {
     "name": "Hog Project",
-    "endpoint": "cal/cs61a/sp26/hog",
+    "endpoint": "cal/cs61a/su26/hog",
     "src": [
         "hog.py"
     ],

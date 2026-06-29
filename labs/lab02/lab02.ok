@@ -1,6 +1,6 @@
 {
     "name": "Lab 2",
-    "endpoint": "cal/cs61a/sp26/lab02",
+    "endpoint": "cal/cs61a/su26/lab02",
     "src": [
         "lab02.py"
     ],
@@ -9,11 +9,12 @@
         "tests/*.py": "ok_test"
     },
     "default_tests": [
-        "lambda",
         "short-circuit",
         "hof-wwpd",
+        "lambda",
         "count_cond",
-        "composite_identity"
+        "composite_identity",
+        "caesar_generator"
     ],
     "protocols": [
         "restore",

@@ -7,28 +7,31 @@ test = {
         {
           'code': r"""
           >>> take_turn(2, 7, 27, make_test_dice(4, 5, 1))
-          9
+          e9a3dddaa9988fe42dd39d1e2cb3390f
+          # locked
           """,
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'multiline': False
         },
         {
           'code': r"""
           >>> take_turn(3, 15, 9, make_test_dice(4, 6, 1))
-          1
+          c4933a0dd093653b499b3bff4a4c8ec8
+          # locked
           """,
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'multiline': False
         },
         {
           'code': r"""
           >>> take_turn(0, 12, 41) # what happens when you roll 0 dice?
-          6
+          3086e969d799e68cd8468df232597f2c
+          # locked
           """,
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'multiline': False
         },
         {
@@ -37,7 +40,7 @@ test = {
           18
           """,
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'multiline': False
         },
         {
@@ -46,7 +49,7 @@ test = {
           9
           """,
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'multiline': False
         },
         {
@@ -55,7 +58,7 @@ test = {
           12
           """,
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'multiline': False
         },
         {
@@ -64,7 +67,7 @@ test = {
           36
           """,
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'multiline': False
         },
         {
@@ -73,7 +76,7 @@ test = {
           28
           """,
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'multiline': False
         },
         {
@@ -82,7 +85,7 @@ test = {
           40
           """,
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'multiline': False
         },
         {
@@ -91,7 +94,7 @@ test = {
           5
           """,
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'multiline': False
         },
         {
@@ -100,7 +103,7 @@ test = {
           1
           """,
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'multiline': False
         }
       ],
@@ -120,7 +123,7 @@ test = {
           9002
           """,
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'multiline': False
         }
       ],

@@ -1,3 +1,68 @@
+# Lab02 Utilities
+
+UPPERCASE_SHIFT = 65
+LOWERCASE_SHIFT = 97
+ALPHA_SHIFT = 26
+
+def letter_to_num(letter):
+    """Converts all letters to numbers 0-51, with lowercase letters mapped to
+    0-25 and uppercase letters mapped to 26-51
+    >>> letter_to_num('a')
+    0
+    >>> letter_to_num('z')
+    25
+    >>> letter_to_num('A')
+    26
+    >>> letter_to_num('Z')
+    51
+    """
+    if letter.isupper():
+        return ord(letter)-UPPERCASE_SHIFT + ALPHA_SHIFT
+    return ord(letter)-LOWERCASE_SHIFT
+
+def num_to_letter(num):
+    """Coverts a number 0-51 to a letter
+    >>> num_to_letter(0)
+    'a'
+    >>> num_to_letter(25)
+    'z'
+    >>> num_to_letter(26)
+    'A'
+    >>> num_to_letter(51)
+    'Z'
+    """
+    try:
+        num = int(num)
+    except ValueError:
+        return ' '
+    num = num % 52
+    if num > 25:
+        return chr(num - ALPHA_SHIFT + UPPERCASE_SHIFT)
+    return chr(num + LOWERCASE_SHIFT)
+
+def mirror_letter(letter):
+    """ Returns the letter in the same position on the other
+    side of the alphabet.
+
+    >>> mirror_letter('a')
+    'z'
+    >>> mirror_letter('z')
+    'a'
+    >>> mirror_letter('B')
+    'Y'
+    >>> mirror_letter('C')
+    'X'
+    """
+    if letter.isupper():
+        return chr(155 - ord(letter))
+    return chr(219 - ord(letter))
+
+
+def looper(f, delimiter=''):
+    """Returns a function that applies function f to every element of an iterable."""
+    return lambda iterable: delimiter.join([str(f(i)) for i in iterable])
+
+
 
 def composite_identity(f, g):
     """
@@ -72,49 +137,50 @@ def count_cond(condition):
     return count
 
 
-def multiple(a, b):
-    """Return the smallest number n that is a multiple of both a and b.
+from operator import add, sub
 
-    >>> multiple(3, 4)
-    12
-    >>> multiple(14, 21)
-    42
+def caesar_generator(num, op):
+    """Returns a one-argument Caesar cipher function. The function should "rotate" a
+    letter by an integer amount 'num' using an operation 'op' (either add or
+    sub).
+
+    You may use the provided `letter_to_num` and `num_to_letter` functions,
+    which will map all lowercase letters a-z to 0-25 and all uppercase letters
+    A-Z to 26-51.
+
+    >>> letter_to_num('a')
+    0
+    >>> letter_to_num('c')
+    2
+    >>> num_to_letter(3)
+    'd'
+
+    >>> caesar2 = caesar_generator(2, add)
+    >>> caesar2('a')
+    'c'
+    >>> brutus3 = caesar_generator(3, sub)
+    >>> brutus3('d')
+    'a'
     """
-    n = max(a, b)
-
-    while not (n % a == 0 and n % b == 0):
-        n += 1
-
-    return n
+    return lambda letter: num_to_letter(op(letter_to_num(letter), num))
 
 
-
-
-def cycle(f1, f2, f3):
-    """Returns a function that is itself a higher-order function.
-
-    >>> def add1(x):
-    ...     return x + 1
-    >>> def times2(x):
-    ...     return x * 2
-    >>> def add3(x):
-    ...     return x + 3
-    >>> my_cycle = cycle(add1, times2, add3)
-    >>> identity = my_cycle(0)
-    >>> identity(5)
-    5
-    >>> add_one_then_double = my_cycle(2)
-    >>> add_one_then_double(1)
-    4
-    >>> do_all_functions = my_cycle(3)
-    >>> do_all_functions(2)
-    9
-    >>> do_more_than_a_cycle = my_cycle(4)
-    >>> do_more_than_a_cycle(2)
-    10
-    >>> do_two_cycles = my_cycle(6)
-    >>> do_two_cycles(1)
-    19
+def is_palindrome(n):
     """
-    "*** YOUR CODE HERE ***"
+    Fill in the blanks '_____' to check if a number
+    is a palindrome.
 
+    >>> is_palindrome(12321)
+    True
+    >>> is_palindrome(42)
+    False
+    >>> is_palindrome(2015)
+    False
+    >>> is_palindrome(55)
+    True
+    """
+    x, y = n, 0
+    f = lambda: y * 10 + x % 10
+    while x > 0:
+        x, y = x // 10, f()
+    return y == n

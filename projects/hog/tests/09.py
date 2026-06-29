@@ -5,14 +5,14 @@ test = {
     {
       'cases': [
         {
-          'answer': 'The lowest num_rolls',
+          'answer': '5719695e08bab301e2a8cef08cc2daad',
           'choices': [
             'The lowest num_rolls',
             'The highest num_rolls',
             'A random num_rolls'
           ],
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'multiline': False,
           'question': r"""
           If multiple num_rolls are tied for the highest scoring
@@ -29,10 +29,11 @@ test = {
           'code': r"""
           >>> dice = make_test_dice(3)   # dice always returns 3
           >>> max_scoring_num_rolls(dice, times_called=1000)
-          10
+          8a27d52d885dfcd62a4a92cbfe64d30a
+          # locked
           """,
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'multiline': False
         },
         {
@@ -69,30 +70,33 @@ test = {
           'code': r"""
           >>> dice = make_test_dice(2)     # dice always rolls 2
           >>> max_scoring_num_rolls(dice, times_called=1000)
-          10
+          8a27d52d885dfcd62a4a92cbfe64d30a
+          # locked
           """,
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'multiline': False
         },
         {
           'code': r"""
           >>> dice = make_test_dice(1)     # dice always rolls 1
           >>> max_scoring_num_rolls(dice, times_called=1000)
-          1
+          c4933a0dd093653b499b3bff4a4c8ec8
+          # locked
           """,
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'multiline': False
         },
         {
           'code': r"""
           >>> dice = make_test_dice(1, 2)  # dice alternates 1 and 2
           >>> max_scoring_num_rolls(dice, times_called=1000)
-          1
+          c4933a0dd093653b499b3bff4a4c8ec8
+          # locked
           """,
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'multiline': False
         },
         {

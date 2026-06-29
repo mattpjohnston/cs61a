@@ -7,64 +7,71 @@ test = {
         {
           'code': r"""
           >>> boar_brawl(21, 46)
-          9
+          e9a3dddaa9988fe42dd39d1e2cb3390f
+          # locked
           """,
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'multiline': False
         },
         {
           'code': r"""
           >>> boar_brawl(52, 79)
-          15
+          c93f67db6585f1aa98e0123a91161c40
+          # locked
           """,
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'multiline': False
         },
         {
           'code': r"""
           >>> boar_brawl(0, 0)
-          1
+          c4933a0dd093653b499b3bff4a4c8ec8
+          # locked
           """,
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'multiline': False
         },
         {
           'code': r"""
           >>> boar_brawl(0, 5)
-          1
+          c4933a0dd093653b499b3bff4a4c8ec8
+          # locked
           """,
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'multiline': False
         },
         {
           'code': r"""
           >>> boar_brawl(5, 0)
-          15
+          c93f67db6585f1aa98e0123a91161c40
+          # locked
           """,
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'multiline': False
         },
         {
           'code': r"""
           >>> boar_brawl(2, 5)
-          6
+          3086e969d799e68cd8468df232597f2c
+          # locked
           """,
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'multiline': False
         },
         {
           'code': r"""
           >>> boar_brawl(7, 2)
-          21
+          383b6800a83090c27da97b04ffebb176
+          # locked
           """,
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'multiline': False
         },
         {
@@ -97,10 +104,11 @@ test = {
         {
           'code': r"""
           >>> boar_brawl(72, 29)
-          1
+          c4933a0dd093653b499b3bff4a4c8ec8
+          # locked
           """,
           'hidden': False,
-          'locked': False,
+          'locked': True,
           'multiline': False
         },
         {
