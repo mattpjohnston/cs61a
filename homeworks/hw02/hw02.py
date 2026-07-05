@@ -53,7 +53,6 @@ def digit_distance(num: int) -> int:
     ...       ['For', 'While'])
     True
     """
-    "*** YOUR CODE HERE ***"
     if num < 10:
         return 0
     return abs((num // 10) % 10 - num % 10) + digit_distance(num // 10)
@@ -121,7 +120,15 @@ def count_dollars(sum_needed: int) -> int:
     >>> check(SOURCE_FILE, 'count_dollars', ['While', 'For'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    def helper(amount_left: int, largest_bill_allowed: int) -> int:
+        if amount_left == 0:
+            return 1
+        if amount_left < 0 or largest_bill_allowed is None:
+            return 0
+        use_bill = helper(amount_left - largest_bill_allowed, largest_bill_allowed)
+        skip_bill = helper(amount_left, next_smaller_dollar(largest_bill_allowed))
+        return use_bill + skip_bill
+    return helper(sum_needed, 100)
 
 
 def shuffle(s: list) -> list:
@@ -138,7 +145,15 @@ def shuffle(s: list) -> list:
     ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
     """
     assert len(s) % 2 == 0, "len(seq) must be even"
-    "*** YOUR CODE HERE ***"
+    result = list()
+    midpoint = len(s) // 2
+    first_half = s[:midpoint]
+    second_half = s[midpoint:]
+    for i in range(midpoint):
+        result.append(first_half[i])
+        result.append(second_half[i])
+
+    return result
 
 
 def deep_map(f, s: list) -> list:
@@ -164,6 +179,11 @@ def deep_map(f, s: list) -> list:
     True
     """
     "*** YOUR CODE HERE ***"
+    for i in range(len(s)):
+        if type(s[i]) is list:
+            deep_map(f, s[i])
+        else:
+            s[i] = f(s[i])
 
 
 def next_larger_dollar(bill: int) -> int:
