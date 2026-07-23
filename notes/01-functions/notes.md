@@ -2,26 +2,15 @@
 
 Reading: Composing Programs 1.1, 1.2, 1.3
 
-## Main Ideas
+## Core Idea
 
-Programming languages are used both to tell computers what to do and to organize ideas about computational processes.
+Programs combine values and functions into expressions, bind names to results, and package repeated computations as functions.
 
-The first major theme is abstraction: giving something complex a name so it can be used as a single unit.
-
-Every powerful programming language needs:
-
-- primitive expressions and statements
-- ways to combine smaller pieces into larger ones
-- ways to name and manipulate compound pieces as units
-
-In early Python, the two main things being organized are data and functions.
-
-- Data: values being manipulated
-- Functions: rules for manipulating values
+The main theme is abstraction: give a complex process a name so it can be used as one unit.
 
 ## Expressions and Statements
 
-An expression evaluates to a value.
+An **expression** evaluates to a value.
 
 ```py
 42
@@ -29,306 +18,106 @@ An expression evaluates to a value.
 max(4, 9)
 ```
 
-A statement performs an action.
+A **statement** performs an action.
 
 ```py
 x = 3
 from math import sqrt
+
 def square(x):
     return x * x
 ```
 
-The distinction matters because expressions can be used inside larger expressions, but statements generally cannot.
-
-```py
-max(2 + 3, 10)
-```
-
-Here `2 + 3` is an expression inside another expression.
-
-## Primitive Expressions
-
-Numerals are primitive expressions.
-
-```py
-42
--1
-3.14
-```
-
-A numeral evaluates to the number it names.
-
-Names are also primitive expressions.
-
-```py
-radius
-max
-square
-```
-
-A name evaluates to the value bound to that name in the current environment.
+Expressions can appear inside larger expressions. Statements generally cannot.
 
 ## Call Expressions
 
-A call expression applies a function to arguments.
+```py
+max(7, 2 + 3)
+```
+
+- `max` is the operator expression.
+- `7` and `2 + 3` are operand expressions.
+- Evaluated operand values are arguments.
+- The function produces a return value.
+
+Evaluation rule:
+
+1. Evaluate the operator.
+2. Evaluate operands from left to right.
+3. Apply the function to the argument values.
 
 ```py
-max(7.5, 9.5)
+from operator import add, mul
+
+add(2, mul(3, 4))  # 14
 ```
 
-Parts of the call:
+Nested calls are evaluated from the inside as required by this rule.
 
-- `max` is the operator expression
-- `7.5` and `9.5` are operand expressions
-- the evaluated operand values are the arguments
-- the result of applying the function is the return value
+## Names, Bindings, and Assignment
 
-The order of arguments matters.
-
-```py
-pow(100, 2)   # 10000
-pow(2, 100)   # 1267650600228229401496703205376
-```
-
-Function notation works well for nesting because the structure is explicit.
-
-```py
-max(min(1, -2), min(pow(3, 5), -4))
-```
-
-## Evaluating Call Expressions
-
-Evaluation rule for call expressions:
-
-1. Evaluate the operator expression.
-2. Evaluate the operand expressions.
-3. Apply the function value to the argument values.
-
-Example:
-
-```py
-from operator import add, sub
-
-sub(add(2, 3), add(10, 4))
-```
-
-Trace:
-
-```text
-sub(add(2, 3), add(10, 4))
-sub(5, add(10, 4))
-sub(5, 14)
--9
-```
-
-Evaluating a call expression can require evaluating smaller call expressions first. This is why the evaluation rule is recursive.
-
-Expression trees show this structure: the full expression is the root, subexpressions are branches, and primitive expressions are leaves.
-
-## Importing Functions
-
-Python has many library functions, but their names are not all available by default. Import statements bind selected names from modules.
-
-```py
-from math import sqrt
-sqrt(256)     # 16.0
-```
-
-The `operator` module contains function versions of common operators.
-
-```py
-from operator import add, sub, mul
-
-add(14, 28)                       # 42
-sub(100, mul(7, add(8, 4)))        # 16
-```
-
-Imported functions can be called like built-in functions.
-
-## Names, Bindings, and Environments
-
-A name is bound to a value when Python has associated that name with that value.
+A name evaluates to its current binding in the environment.
 
 ```py
 radius = 10
-```
-
-After this assignment, `radius` is bound to `10`.
-
-An environment stores name-value bindings. The meaning of a name depends on the environment where it is evaluated.
-
-```py
-2 * radius
-```
-
-This expression only has a value if `radius` has a binding in the current environment.
-
-Names can refer to numbers, functions, and other values.
-
-```py
-max
-```
-
-This evaluates to the built-in `max` function, unless the name has been rebound.
-
-## Assignment
-
-Assignment is a basic form of abstraction. It gives a name to a value.
-
-```py
 area = 3.14159 * radius * radius
 ```
 
-Python evaluates the expression on the right side first, then binds the name on the left.
+Assignment evaluates the entire right side first, then binds the result.
 
 ```py
 x = 2
-x = x + 1
+x = x + 1  # evaluate old x + 1, then rebind x to 3
 ```
 
-Trace:
-
-```text
-evaluate right side: x + 1 -> 2 + 1 -> 3
-bind x to 3
-```
-
-Rebinding a name removes the old binding for that name.
-
-```py
-f = max
-f(2, 3, 4)    # 4
-
-f = 2
-f             # 2
-```
-
-Names are not values themselves; names point to whatever value they are currently bound to.
-
-## Rebinding Built-In Names
-
-Built-in names can be rebound, which can cause confusing errors.
-
-```py
-max = 5
-max
-```
-
-Now `max` is bound to `5`, not to the built-in function.
-
-```py
-max(2, 3, 4)
-```
-
-This causes a `TypeError` because an integer is being used as the operator in a call expression.
-
-If another name was already bound to the original function, that name still works.
+A name is not the value itself. Rebinding a name changes what it refers to.
 
 ```py
 f = max
 max = 5
-f(2, 3, 4)
+f(2, 8)  # 8
 ```
 
-Here `f` still refers to the function value that `max` referred to before `max` was rebound.
+`f` still refers to the original function value.
+
+Avoid rebinding built-in names such as `max`, `list`, or `sum`; later calls may fail or become confusing.
 
 ## Multiple Assignment
 
-Python can bind multiple names in one assignment statement.
+All right-side expressions are evaluated before any left-side names are rebound.
 
 ```py
-area, circumference = pi * radius * radius, 2 * pi * radius
+x, y = 3, 4
+x, y = y, x
+# x is 4; y is 3
 ```
 
-All right-side expressions are evaluated before any left-side names are bound.
-
-This makes swapping possible:
+This is useful for state updates that depend on old values.
 
 ```py
-x, y = 3, 4.5
-y, x = x, y
+previous, current = current, previous + current
 ```
 
-Final bindings:
+## Pure Functions and Side Effects
 
-```text
-x -> 4.5
-y -> 3
-```
-
-Changing one name does not automatically update another name.
+A pure function only returns a value and gives the same result for the same arguments.
 
 ```py
-from math import pi
-
-radius = 10
-area = pi * radius * radius
-radius = 11
-area
+abs(-3)  # 3
 ```
 
-`area` still has the value computed when `radius` was `10`.
-
-## Pure and Non-Pure Functions
-
-A pure function has no effects beyond returning a value. Calling it with the same arguments always returns the same result.
+A non-pure function also has a side effect, such as displaying output.
 
 ```py
-abs(-2)      # 2
-max(1, 5)    # 5
+result = print(3)
+# displays 3; result is None
 ```
 
-A non-pure function can produce side effects. A side effect changes something outside the return value, such as displaying output.
-
-`print` is non-pure.
-
-```py
-print(1, 2, 3)
-```
-
-Output:
-
-```text
-1 2 3
-```
-
-The return value of `print` is always `None`.
-
-```py
-two = print(2)
-print(two)
-```
-
-Output:
-
-```text
-2
-None
-```
-
-The first line prints `2` as a side effect and binds `two` to `None`.
-
-## Nested Print Example
-
-Expression:
+Keep returned values separate from printed output.
 
 ```py
 print(print(1), print(2))
-```
-
-Evaluation:
-
-```text
-evaluate outer operator: print
-evaluate first operand: print(1)
-  side effect: displays 1
-  return value: None
-evaluate second operand: print(2)
-  side effect: displays 2
-  return value: None
-apply outer print to None and None
-  side effect: displays None None
-  return value: None
 ```
 
 Output:
@@ -339,569 +128,149 @@ Output:
 None None
 ```
 
-The example shows why return values and side effects must be kept separate.
+The inner calls print and return `None`; the outer call prints those two return values.
 
-## Function Definitions
-
-A function definition creates a user-defined function and binds a name to it.
-
-```py
-from operator import mul
-
-def square(x):
-    return mul(x, x)
-```
-
-Parts:
-
-- `square`: function name
-- `x`: formal parameter
-- `return mul(x, x)`: function body / return expression
-
-General form:
-
-```py
-def <name>(<formal parameters>):
-    return <return expression>
-```
-
-The return expression is not evaluated when the function is defined. It is stored as part of the function and evaluated when the function is called.
-
-```py
-square(21)          # 441
-square(square(3))   # 81
-```
-
-## Def Statements and Assignment
-
-Both assignment statements and `def` statements bind names to values.
-
-```py
-def g():
-    return 1
-
-g()     # 1
-
-g = 2
-g       # 2
-
-def g(h, i):
-    return h + i
-
-g(1, 2) # 3
-```
-
-Each new binding replaces the previous binding for that name.
-
-## User-Defined Functions
-
-User-defined functions are called the same way as built-in functions.
-
-```py
-from operator import add, mul
-
-def square(x):
-    return mul(x, x)
-
-def sum_squares(x, y):
-    return add(square(x), square(y))
-
-sum_squares(3, 4)   # 25
-```
-
-The definition of `sum_squares` depends on the behavior of `square`, not on whether `square` is built in, imported, or user-defined.
-
-## Function Signatures
-
-A function signature describes the function's formal parameters.
+## Defining Functions
 
 ```py
 def square(x):
     return x * x
 ```
 
-Signature:
+- `square` is the function name.
+- `x` is a formal parameter.
+- `return x * x` is the body.
 
-```text
-square(x)
-```
+Executing a `def` statement:
 
-`square` expects one argument.
+1. creates a function value
+2. records its parameters, body, and parent environment
+3. binds the function name
+4. does not execute the body
 
-```py
-square(2, 3)   # too many arguments
-square()       # too few arguments
-```
-
-Built-in functions are often written in diagrams with `...` because their formal parameter names are not shown.
-
-```text
-max(...)
-mul(...)
-```
-
-## Frames
-
-An environment is a sequence of frames.
-
-A frame contains bindings from names to values.
-
-There is a global frame. Assignment and import statements at the top level add bindings to the global frame.
+Calling and referring to a function are different.
 
 ```py
-from math import pi
-tau = 2 * pi
+square     # function value
+square(5)  # call; evaluates to 25
 ```
 
-Global frame:
+## Calling a User-Defined Function
+
+For a call such as `square(5)`:
+
+1. Evaluate the operator and operands.
+2. Create a fresh local frame.
+3. Bind formal parameters to argument values.
+4. Execute the body in that environment.
+5. Return the first executed `return` value.
 
 ```text
-pi -> 3.14159...
-tau -> 6.28318...
+Global:
+  square -> function square(x)
+
+square call frame:
+  x -> 5
+  return value -> 25
 ```
 
-Function calls create local frames.
-
-## Calling User-Defined Functions
-
-To apply a user-defined function:
-
-1. Bind the argument values to the function's formal parameters in a new local frame.
-2. Execute the body of the function in an environment beginning with that local frame.
-
-Example:
-
-```py
-from operator import mul
-
-def square(x):
-    return mul(x, x)
-
-square(-2)
-```
-
-Global frame:
-
-```text
-mul -> built-in multiplication function
-square -> function square(x)
-```
-
-Local frame for `square(-2)`:
-
-```text
-x -> -2
-return value -> 4
-```
-
-The top-level expression `square(-2)` is evaluated in the global environment. The return expression `mul(x, x)` is evaluated in the environment created by calling `square`.
-
-## Name Lookup
-
-A name evaluates to the value bound to that name in the earliest frame of the current environment where the name is found.
-
-Inside this function:
-
-```py
-from operator import mul
-
-def square(x):
-    return mul(x, x)
-```
-
-Name lookup for `mul(x, x)`:
-
-```text
-x   -> found in the local square frame
-mul -> found in the global frame
-```
-
-The order of frames matters. Local bindings are checked before global bindings.
-
-## Multiple Function Calls and Frames
-
-Each function call has its own local frame, even when the same function is called more than once.
-
-```py
-from operator import add, mul
-
-def square(x):
-    return mul(x, x)
-
-def sum_squares(x, y):
-    return add(square(x), square(y))
-
-result = sum_squares(5, 12)
-```
-
-Evaluation sketch:
-
-```text
-call sum_squares(5, 12)
-  local frame:
-    x -> 5
-    y -> 12
-
-evaluate square(x)
-  x is 5 in the sum_squares frame
-  call square(5)
-    new local frame:
-      x -> 5
-      return value -> 25
-
-evaluate square(y)
-  y is 12 in the sum_squares frame
-  call square(12)
-    new local frame:
-      x -> 12
-      return value -> 144
-
-apply add to 25 and 144
-sum_squares return value -> 169
-```
-
-The `x` in the `sum_squares` frame and the `x` in each `square` frame are different bindings.
+Every call gets a separate frame, even when the same function is called repeatedly.
 
 ## Local Names and Scope
 
-Formal parameters are local to the body of the function.
-
-These two definitions have the same behavior:
+Formal parameters and assignments inside a function are local to that call.
 
 ```py
-def square(x):
-    return x * x
+x = 10
 
-def square(y):
-    return y * y
+def add_one(x):
+    result = x + 1
+    return result
+
+add_one(3)  # 4
+global x    # still 10
 ```
 
-The parameter name is an implementation detail as long as the function computes the same relationship between input and output.
+A local binding can shadow a global binding with the same name.
 
-The scope of a local name is limited to the function body where it is defined. Once the function call is finished, the local frame is gone.
+After a call finishes, its frame is no longer active. It normally becomes inaccessible, but it can remain reachable when a closure refers to it.
 
-## Bound Names and Intrinsic Names
+## Return Statements
 
-A function has an intrinsic name from its definition. A frame can bind any name to that function.
+`return`:
+
+1. evaluates its expression
+2. ends the current function call immediately
+3. supplies the value to the caller
+
+A function that reaches the end without executing `return` returns `None`.
 
 ```py
-def square(x):
-    return x * x
+def broken_square(x):
+    x * x
 
-f = square
+broken_square(4) is None  # True
 ```
 
-`square` and `f` both refer to the same function value, but the function's intrinsic name is still `square`.
-
-During evaluation, Python uses the bound name that appears in the expression.
-
-```py
-f(4)
-```
-
-Python looks up `f` in the current environment and applies the function value it finds.
+An expression by itself is evaluated and discarded in a function body.
 
 ## Functional Abstraction
 
-A function definition can hide implementation details.
+A good function lets callers depend on **what it does**, not **how it does it**.
 
 ```py
 def square(x):
     return x * x
+
 
 def sum_squares(x, y):
     return square(x) + square(y)
 ```
 
-`sum_squares` relies on what `square` does, not on how `square` does it.
+`sum_squares` depends on the behavior of `square`, not its implementation.
 
-Different implementations can represent the same abstraction:
+A functional abstraction has:
 
-```py
-def square(x):
-    return x * x
+- **domain**: valid inputs
+- **range**: possible outputs
+- **intent**: relationship between input and output
 
-def square(x):
-    return x ** 2
-```
-
-Both implementations have the same intent for numeric inputs.
-
-The main attributes of a functional abstraction:
-
-- Domain: the set of valid inputs
-- Range: the set of possible return values
-- Intent: the relationship between inputs and output
-
-For `square`:
-
-```text
-Domain: one real number
-Range: a non-negative real number
-Intent: return the input multiplied by itself
-```
-
-## Naming
-
-Clear names make function definitions easier to read.
-
-Common Python naming conventions:
-
-- function names are lowercase
-- words are separated by underscores
-- parameter names are lowercase
-- parameter names should describe the role of the argument
-- single-letter names are acceptable when the role is obvious
-
-Examples:
-
-```py
-def square(x):
-    return x * x
-
-def calculate_area(radius):
-    return 3.14159 * radius * radius
-```
-
-Avoid names that are easy to confuse with numerals:
-
-```text
-l, O, I
-```
+Good functions usually have one clear job, a descriptive name, and a short contract.
 
 ## Operators
 
-Infix operators such as `+`, `-`, `*`, and `/` are special expression forms, but they can often be understood as shorthand for function calls.
+Infix operators are expression forms with precedence rules.
 
 ```py
-2 + 3
+2 + 3 * 4      # 14
+(2 + 3) * 4    # 20
 ```
 
-Similar meaning:
+Important arithmetic operators:
 
-```py
-from operator import add
-add(2, 3)
+```text
++   addition
+-   subtraction
+*   multiplication
+/   true division
+//  floor division
+%   remainder
+**  exponentiation
 ```
-
-Operator precedence controls how expressions are grouped.
-
-```py
-2 + 3 * 4 + 5
-```
-
-Equivalent structure:
-
-```py
-add(add(2, mul(3, 4)), 5)
-```
-
-Parentheses override normal precedence.
-
-```py
-(2 + 3) * (4 + 5)
-```
-
-Equivalent structure:
-
-```py
-mul(add(2, 3), add(4, 5))
-```
-
-Idiomatic Python usually uses infix operators for simple arithmetic.
-
-## Division
-
-Python has two main division operators in this part of the course.
-
-True division:
 
 ```py
 5 / 4    # 1.25
-8 / 4    # 2.0
+5 // 4   # 1
+-5 // 4  # -2: floor means round down
 ```
 
-Floor division:
+## Common Traps
 
-```py
-5 // 4     # 1
--5 // 4    # -2
-```
-
-`//` rounds down to the nearest integer, not toward zero.
-
-Function equivalents:
-
-```py
-from operator import truediv, floordiv
-
-truediv(5, 4)    # 1.25
-floordiv(5, 4)   # 1
-```
-
-## Debugging Principles
-
-Early debugging usually comes down to checking bindings, return values, and side effects.
-
-Important habits:
-
-- test small pieces independently
-- isolate the smallest expression or function causing the issue
-- check what each name is bound to
-- separate printed output from returned values
-- trace nested call expressions one call at a time
-
-## Key Traces
-
-### Assignment
-
-```py
-x = 2
-x = x + 1
-x
-```
-
-Trace:
-
-```text
-x -> 2
-evaluate x + 1 -> 3
-rebind x -> 3
-```
-
-Final value:
-
-```text
-3
-```
-
-### Multiple Assignment Swap
-
-```py
-x, y = 3, 4.5
-y, x = x, y
-```
-
-Trace:
-
-```text
-evaluate right side of second assignment:
-  x -> 3
-  y -> 4.5
-
-bind left side:
-  y -> 3
-  x -> 4.5
-```
-
-### Function Rebinding
-
-```py
-def double(x):
-    return x + x
-
-twice = double
-double = 7
-twice(5)
-```
-
-Trace:
-
-```text
-double -> function double(x)
-twice -> same function
-double -> 7
-twice(5) -> 10
-```
-
-### User-Defined Function Call
-
-```py
-def square(x):
-    return x * x
-
-square(6)
-```
-
-Trace:
-
-```text
-look up square -> function square(x)
-evaluate operand 6 -> 6
-create local frame:
-  x -> 6
-evaluate return expression:
-  x * x -> 36
-return 36
-```
-
-### Nested Function Calls
-
-```py
-def square(x):
-    return x * x
-
-def sum_squares(x, y):
-    return square(x) + square(y)
-
-sum_squares(2, 5)
-```
-
-Trace:
-
-```text
-sum_squares frame:
-  x -> 2
-  y -> 5
-
-square(2) frame:
-  x -> 2
-  return -> 4
-
-square(5) frame:
-  x -> 5
-  return -> 25
-
-sum_squares return -> 29
-```
-
-## Common Pitfalls
-
-Confusing printed output with return values:
-
-```py
-x = print(3)
-```
-
-`x` is bound to `None`, not `3`.
-
-Expecting old assignments to update automatically:
-
-```py
-radius = 10
-area = 3.14 * radius * radius
-radius = 20
-```
-
-`area` still has the old computed value.
-
-Rebinding a function name to a non-function value:
-
-```py
-max = 5
-max(1, 2)
-```
-
-The call fails because `max` is no longer bound to the built-in function.
-
-Forgetting that each function call has a fresh local frame:
-
-```py
-def f(x):
-    return x + 1
-
-f(2)
-f(10)
-```
-
-The `x` in the first call and the `x` in the second call are separate local bindings.
+- Confusing a function value with a function call.
+- Forgetting `return` and receiving `None`.
+- Confusing printed output with a return value.
+- Rebinding a built-in function name.
+- Expecting an earlier computed value to update automatically after another name changes.
+- Forgetting that each call has a fresh local frame.
+- Assuming assignment changes a value rather than rebinding a name.
+- Ignoring left-to-right operand evaluation when calls have side effects.
