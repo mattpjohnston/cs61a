@@ -1,5 +1,7 @@
 """Typing test implementation"""
 
+from mercurial.error import WdirUnsupported
+
 from utils import (
     lower,
     split,
@@ -194,7 +196,16 @@ def autocorrect(
     'testing'
     """
     # BEGIN PROBLEM 5
-    "*** YOUR CODE HERE ***"
+    if entered_word in word_list:
+        return entered_word
+
+    closest_word = min(
+        word_list, key=lambda word: diff_function(entered_word, word, limit)
+    )
+
+    if diff_function(entered_word, closest_word, limit) > limit:
+        return entered_word
+    return closest_word
     # END PROBLEM 5
 
 
@@ -221,7 +232,13 @@ def furry_fixes(entered: str, source: str, limit: int) -> int:
     5
     """
     # BEGIN PROBLEM 6
-    assert False, "Remove this line"
+    if limit < 0:
+        return 1
+    if not entered or not source:
+        return abs(len(entered) - len(source))
+    if entered[0] == source[0]:
+        return furry_fixes(entered[1:], source[1:], limit)
+    return 1 + furry_fixes(entered[1:], source[1:], limit - 1)
     # END PROBLEM 6
 
 
@@ -242,22 +259,23 @@ def minimum_mewtations(entered: str, source: str, limit: int) -> int:
     >>> minimum_mewtations("ckiteus", "kittens", big_limit) # ckiteus -> kiteus -> kitteus -> kittens
     3
     """
-    assert False, "Remove this line"
-    if ___________:  # Base cases should go here, you may add more base cases as needed.
+    if limit < 0:  # Base cases should go here, you may add more base cases as needed.
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        return 1
         # END
     # Recursive cases should go below here
-    if ___________:  # Feel free to remove or add additional cases
+    if not entered or not source:  # Feel free to remove or add additional cases
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        return abs(len(entered) - len(source))
         # END
+    if entered[0] == source[0]:
+        return minimum_mewtations(entered[1:], source[1:], limit)
     else:
-        add = ...  # Fill in these lines
-        remove = ...
-        substitute = ...
+        add = minimum_mewtations(entered, source[1:], limit - 1)
+        remove = minimum_mewtations(entered[1:], source, limit - 1)
+        substitute = minimum_mewtations(entered[1:], source[1:], limit - 1)
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        return 1 + min(add, remove, substitute)
         # END
 
 
@@ -305,7 +323,15 @@ def report_progress(
     0.2
     """
     # BEGIN PROBLEM 8
-    "*** YOUR CODE HERE ***"
+    progress = 0
+    for i in range(min(len(entered), len(source))):
+        if entered[i] != source[i]:
+            break
+        progress += 1
+
+    ratio = progress / len(source)
+    upload({"id": user_id, "progress": ratio})
+    return ratio
     # END PROBLEM 8
 
 
@@ -329,7 +355,12 @@ def time_per_word(words: list[str], timestamps_per_player: list[list[int]]) -> d
     """
     ts_by_player = timestamps_per_player  # A shorter name (for convenience)
     # BEGIN PROBLEM 9
-    times = []  # You may remove this line
+    times = []
+    for player in ts_by_player:
+        player_times = []
+        for i in range(len(player) - 1):
+            player_times.append(player[i + 1] - player[i])
+        times.append(player_times)
     # END PROBLEM 9
     return {"words": words, "times": times}
 
@@ -357,7 +388,13 @@ def fastest_words(words_and_times: dict) -> list[list[str]]:
     pl_idxs = range(len(times))  # contains an *index* for each player
     w_idxs = range(len(words))  # contains an *index* for each word
     # BEGIN PROBLEM 10
-    "*** YOUR CODE HERE ***"
+    fastest_by_player = [[] for _ in pl_idxs]
+
+    for word in w_idxs:
+        fastest_player = min(pl_idxs, key=lambda player: get_time(times, player, word))
+        fastest_by_player[fastest_player].append(words[word])
+
+    return fastest_by_player
     # END PROBLEM 10
 
 
